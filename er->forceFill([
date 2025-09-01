@@ -1,0 +1,16 @@
+[90m= [39m[34;4mApp\Models\User[39;24m {#6669
+    [34mid[39m: [35m2[39m,
+    [34mname[39m: "[32mTest Driver[39m",
+    [34memail[39m: "[32mifeanyieze50@gmail.com[39m",
+    [34mphone[39m: "[32m+2347073388857[39m",
+    [34mis_manager[39m: [35m1[39m,
+    [34memail_verified_at[39m: "[32m2025-08-19 20:00:35[39m",
+    #[33mpassword[39m: "[32m$2y$12$GyP6wdNi93Dl9kxS8OerFO2riBjEGyA2V34EnhMQdpHGK4/AsZLJu[39m",
+    #[33mremember_token[39m: "[32m6i1HgenLbG6rAm2dPY2d3UMXdwkXer2oFEVRfUAOmiuEz5WpFlJwqUgcPnik[39m",
+    [34mis_super_admin[39m: [35m1[39m,
+    [34mprofile_photo_path[39m: "[32mprofiles/driver1.jpg[39m",
+    [34mcreated_at[39m: "[32m2025-08-18 10:00:27[39m",
+    [34mupdated_at[39m: "[32m2025-08-26 10:44:13[39m",
+    +[1mprofile_photo_url[22m: "[32mhttps://logistics.tamroselimited.com/storage/profiles/driver1.jpg[39m",
+  }
+

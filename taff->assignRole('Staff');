@@ -1,0 +1,11 @@
+[90m= [39m[34;4mApp\Models\User[39;24m {#6733
+    [34memail[39m: "[32mitsupport@tamrose.com[39m",
+    [34mname[39m: "[32mTest Staff 2[39m",
+    #[33mpassword[39m: "[32m$2y$12$KOnDgGdE.4PuvI6scEy73ukmgRQUMqX93P7bAhrsrc1/fFsfIlSM2[39m",
+    [34mphone[39m: "[32m08020000002[39m",
+    [34mupdated_at[39m: "[32m2025-08-24 13:59:18[39m",
+    [34mcreated_at[39m: "[32m2025-08-24 13:59:18[39m",
+    [34mid[39m: [35m4[39m,
+    +[1mprofile_photo_url[22m: "[32mhttps://ui-avatars.com/api/?name=Test+Staff+2&background=10B981&color=fff[39m",
+  }
+

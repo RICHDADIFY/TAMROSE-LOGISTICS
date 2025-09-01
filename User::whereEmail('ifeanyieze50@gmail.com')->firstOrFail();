@@ -1,0 +1,16 @@
+[90m= [39m[34;4mApp\Models\User[39;24m {#6674
+    [34mid[39m: [35m1[39m,
+    [34mname[39m: "[32mIfeanyi Eze[39m",
+    [34memail[39m: "[32mieze@tamrose.com[39m",
+    [34mphone[39m: "[32m09069982301[39m",
+    [34mis_manager[39m: [35m1[39m,
+    [34memail_verified_at[39m: [36mnull[39m,
+    #[33mpassword[39m: "[32m$2y$12$tSFBLoPsnWfknoprIuOu4..lUWuVlxCYkl38KT8AsREpgcZckXTaC[39m",
+    #[33mremember_token[39m: [36mnull[39m,
+    [34mis_super_admin[39m: [35m0[39m,
+    [34mprofile_photo_path[39m: "[32m/profiles/manager.jpg[39m",
+    [34mcreated_at[39m: "[32m2025-08-17 18:20:49[39m",
+    [34mupdated_at[39m: "[32m2025-08-21 10:09:11[39m",
+    +[1mprofile_photo_url[22m: "[32mhttps://logistics.tamroselimited.com/storage/profiles/manager.jpg[39m",
+  }
+
