@@ -1,0 +1,55 @@
+name: Build & Deploy Frontend (public/build)
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "resources/**"
+      - "vite.config.*"
+      - "package*.json"
+      - "tsconfig.json"
+  workflow_dispatch: {}
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    env:
+      # give Vite the Google key at build time (add this secret in step 2)
+      VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      # ensure the destination exists
+      - name: Ensure target directory
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: mkdir -p /home/tamros5/logistics.tamroselimited.com/public/build
+
+      # upload only public/build to your server
+      - name: Upload public/build
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          source: "public/build/*"
+          target: "/home/tamros5/logistics.tamroselimited.com/public/build"
+          rm: true
