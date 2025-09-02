@@ -10,11 +10,14 @@ on:
       - "tsconfig.json"
   workflow_dispatch: {}
 
+concurrency:
+  group: build-deploy-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     env:
-      # give Vite the Google key at build time (add this secret in step 2)
       VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
 
     steps:
@@ -23,6 +26,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
 
       - name: Install deps
         run: npm ci
@@ -30,7 +34,12 @@ jobs:
       - name: Build assets
         run: npm run build
 
-      # ensure the destination exists
+      - name: List built files (debug)
+        run: |
+          ls -lah public/build
+          echo "---- manifest head ----"
+          head -c 300 public/build/manifest.json || true
+
       - name: Ensure target directory
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -41,7 +50,6 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: mkdir -p /home/tamros5/logistics.tamroselimited.com/public/build
 
-      # upload only public/build to your server
       - name: Upload public/build
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -50,6 +58,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          source: "public/build/*"
+          source: "public/build/**"    # copy the contents of build
           target: "/home/tamros5/logistics.tamroselimited.com/public/build"
-          rm: true
+          strip_components: 2          # drop leading public/build/
+          rm: true                     # clean target before upload
