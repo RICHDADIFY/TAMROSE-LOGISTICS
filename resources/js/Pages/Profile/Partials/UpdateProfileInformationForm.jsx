@@ -5,6 +5,7 @@ import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import AvatarCapture from '@/Components/AvatarCapture';
 import { useMemo, useState } from 'react';
+import { router } from '@inertiajs/react';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
   const user = usePage().props.auth.user;
@@ -22,20 +23,37 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
     avatar: null,
   });
 
-  const onAvatar = (file) => {
-    setAvatarError(null);
-    if (!file) return;
-    if (file.size > 3 * 1024 * 1024) { setAvatarError('Image must be less than 3MB.'); return; }
-    setData('avatar', file);
-  };
+ // state stays the same; ensure onAvatar stores a File with a filename
+
+// ensure AvatarCapture gives us a File with a filename
+const onAvatar = (file) => {
+  setAvatarError(null);
+  if (!file) return;
+  if (file.size > 3 * 1024 * 1024) { setAvatarError('Image must be less than 3MB.'); return; }
+
+  const asFile = file.name
+    ? file
+    : new File([file], 'avatar.webp', { type: file.type || 'image/webp', lastModified: Date.now() });
+
+  setData('avatar', asFile);
+};
 
 const submit = (e) => {
   e.preventDefault();
-  patch(route('profile.update'), {
+
+  router.post(route('profile.save'), {
+    name:  data.name,
+    email: data.email,
+    phone: data.phone,
+    avatar: data.avatar ?? null,   // File object (or null)
+  }, {
+    forceFormData: true,           // ensure multipart/form-data
     preserveScroll: true,
-    forceFormData: !!data.avatar,   // only when a file is present
+    onError: (errs) => setAvatarError(errs?.avatar),
   });
 };
+
+
 
 
 
@@ -78,47 +96,51 @@ const submit = (e) => {
 
 
           {/* Name */}
-          <div>
-            <InputLabel htmlFor="name" value="Name" />
-            <input
-              id="name"
-              className={baseInput}
-              value={data.name}
-              onChange={(e) => setData('name', e.target.value)}
-              required
-              autoComplete="name"
-            />
-            <InputError className="mt-2" message={errors.name} />
-          </div>
+<div>
+  <InputLabel htmlFor="name" value="Name" />
+  <input
+    id="name"
+    name="name"                 // ← add
+    className={baseInput}
+    value={data.name}
+    onChange={(e) => setData('name', e.target.value)}
+    required
+    autoComplete="name"
+  />
+  <InputError className="mt-2" message={errors.name} />
+</div>
 
-          {/* Email */}
-          <div>
-            <InputLabel htmlFor="email" value="Email" />
-            <input
-              id="email"
-              type="email"
-              className={baseInput}
-              value={data.email}
-              onChange={(e) => setData('email', e.target.value)}
-              required
-              autoComplete="username"
-            />
-            <InputError className="mt-2" message={errors.email} />
-          </div>
+{/* Email */}
+<div>
+  <InputLabel htmlFor="email" value="Email" />
+  <input
+    id="email"
+    name="email"                // ← add
+    type="email"
+    className={baseInput}
+    value={data.email}
+    onChange={(e) => setData('email', e.target.value)}
+    required
+    autoComplete="username"
+  />
+  <InputError className="mt-2" message={errors.email} />
+</div>
 
-          {/* Phone */}
-          <div>
-            <InputLabel htmlFor="phone" value="Phone" />
-            <input
-              id="phone"
-              className={baseInput}
-              value={data.phone}
-              onChange={(e) => setData('phone', e.target.value)}
-              required
-              autoComplete="tel"
-            />
-            <InputError className="mt-2" message={errors.phone} />
-          </div>
+{/* Phone */}
+<div>
+  <InputLabel htmlFor="phone" value="Phone" />
+  <input
+    id="phone"
+    name="phone"                // ← add
+    className={baseInput}
+    value={data.phone}
+    onChange={(e) => setData('phone', e.target.value)}
+    required
+    autoComplete="tel"
+  />
+  <InputError className="mt-2" message={errors.phone} />
+</div>
+
 
           {/* Verify note */}
           {mustVerifyEmail && user?.email_verified_at === null && (
